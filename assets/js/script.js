@@ -92,4 +92,40 @@ async function fetchCharacters() {
     isLoading = false;
   }
 }
+// funcion para buscar personajes
+function searchCharacters() {
+  charactersContainer.innerHTML = "";
+  currentPage = 1;
+  searchQuery = searchInput.value.trim();
+  fetchCharacters();
+}
+
+// botón de búsqueda
+searchBtn.addEventListener("click", () => {
+  searchQuery = searchInput.value.trim();
+  currentPage = 1;
+  charactersContainer.innerHTML = "";
+  fetchCharacters();
+});
+
+// enter en el input
+searchInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    searchQuery = searchInput.value.trim();
+    currentPage = 1;
+    charactersContainer.innerHTML = "";
+    fetchCharacters();
+  }
+});
+
+// botón de limpiar búsqueda (mismo comportamiento que buscar pero sin texto)
+const clearBtn = document.getElementById("clearBtn");
+clearBtn.addEventListener("click", () => {
+  searchInput.value = "";
+  searchQuery = "";
+  currentPage = 1;
+  charactersContainer.innerHTML = "";
+  fetchCharacters();
+});
+
 
