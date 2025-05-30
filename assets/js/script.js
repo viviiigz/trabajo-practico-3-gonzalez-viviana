@@ -1,38 +1,42 @@
-//elemtos dom
-const API_URL = 'https://dragonball-api.com/api/characters';
-const container = document.getElementById('charactersContainer');
-const loader = document.getElementById('loader');
-const searchBtn = document.getElementById('searchBtn');
-const searchInput = document.getElementById('searchInput');
+const charactersContainer = document.getElementById("charactersContainer");
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const loader = document.getElementById("loader");
+const modal = new bootstrap.Modal(document.getElementById("characterModal"));
+const modalContent = document.getElementById("modalContent");
 
-let page = 1;
+let currentPage = 1;
 let isLoading = false;
-let isSearching = false;
+let searchQuery = "";
 
-// buscar personajes
-async function fetchCharacters(name = '', pageNum = 1) {
-  try {
-    loader.classList.remove('d-none');
-    let url;
-
-    if (name) {
-      url = `${API_URL}?name=${encodeURIComponent(name)}`;
-    } else {
-      url = `${API_URL}?page=${pageNum}`;
-    }
-
-    const res = await fetch(url);
-
-    if (!res.ok) throw new Error('Error al consultar la API');
-
-    const data = await res.json();
-    const characters = Array.isArray(data) ? data : data.items;
-    return characters || [];
-    
-  } catch (error) {
-    alert(error.message);
-    return [];
-  } finally {
-    loader.classList.add('d-none');
-  }
+// Función para mostrar el loader
+function showLoader() {
+  loader.classList.remove("d-none");
 }
+
+// Función para ocultar el loader
+function hideLoader() {
+  loader.classList.add("d-none");
+}
+
+// Función para mostrar personajes en el contenedor
+function displayCharacters(characters) {
+  characters.forEach((character) => {
+    const characterCard = document.createElement("div");
+    characterCard.className = "col";
+    characterCard.innerHTML = `
+      <div class="card h-100">
+        <img src="${character.image}" class="card-img-top" alt="${character.name}" />
+        <div class="card-body">
+          <h5 class="card-title">${character.name}</h5>
+          <p class="card-text">Ki: ${character.ki}</p>
+          <button class="btn btn-secondary" onclick="showCharacterDetails(${character.id})">
+            Ver detalles
+          </button>
+        </div>
+      </div>
+    `;
+    charactersContainer.appendChild(characterCard);
+  });
+}
+
