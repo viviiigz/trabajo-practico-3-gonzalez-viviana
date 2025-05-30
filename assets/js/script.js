@@ -70,19 +70,40 @@ async function fetchCharacters() {
   showLoader();
 
   try {
-    const url = searchQuery
-      ? `https://dragonball-api.com/api/characters?name=${searchQuery}&page=${currentPage}`
-      : `https://dragonball-api.com/api/characters?page=${currentPage}`;
+    if (searchQuery) {
+      charactersContainer.innerHTML = ""; 
+      let allCharacters = [];
+      let page = 1;
+      let totalPages = 1;
 
-    const response = await fetch(url);
-    const data = await response.json();
+      do {
+        const response = await fetch(`https://dragonball-api.com/api/characters?page=${page}`);
+        const data = await response.json();
+        if (data.items) {
+          allCharacters = allCharacters.concat(data.items);
+        }
+        totalPages = data.meta.totalPages;
+        page++;
+      } while (page <= totalPages);
 
-    if (data.items && data.items.length > 0) {
-      displayCharacters(data.items);
-      currentPage++;
-    } else {
-      if (currentPage === 1) {
+      const filtered = allCharacters.filter(character =>
+        character.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      if (filtered.length > 0) {
+        displayCharacters(filtered);
+      } else {
         charactersContainer.innerHTML = `<p class="text-center">No se encontraron personajes.</p>`;
+      }
+    } else {
+      // modo scroll infinito 
+      const url = `https://dragonball-api.com/api/characters?page=${currentPage}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.items && data.items.length > 0) {
+        displayCharacters(data.items);
+        currentPage++;
       }
     }
   } catch (error) {
@@ -92,6 +113,7 @@ async function fetchCharacters() {
     isLoading = false;
   }
 }
+
 // funcion para buscar personajes
 function searchCharacters() {
   charactersContainer.innerHTML = "";
@@ -100,7 +122,7 @@ function searchCharacters() {
   fetchCharacters();
 }
 
-// botón de búsqueda
+// boton de búsqueda
 searchBtn.addEventListener("click", () => {
   searchQuery = searchInput.value.trim();
   currentPage = 1;
@@ -118,7 +140,7 @@ searchInput.addEventListener("keypress", function (event) {
   }
 });
 
-// botón de limpiar búsqueda (mismo comportamiento que buscar pero sin texto)
+// boton de limpiar búsqueda 
 const clearBtn = document.getElementById("clearBtn");
 clearBtn.addEventListener("click", () => {
   searchInput.value = "";
@@ -127,5 +149,16 @@ clearBtn.addEventListener("click", () => {
   charactersContainer.innerHTML = "";
   fetchCharacters();
 });
+// scroll infinito
+window.addEventListener("scroll", () => {
+  if (
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
+    !isLoading
+  ) {
+    fetchCharacters();
+  }
+});
 
+// cargar personajes al inicio
+fetchCharacters();
 
