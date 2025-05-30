@@ -6,6 +6,7 @@ const modal = new bootstrap.Modal(document.getElementById("characterModal"));
 const modalContent = document.getElementById("modalContent");
 
 let currentPage = 1;
+let hasReachedEnd = false;
 let isLoading = false;
 let searchQuery = "";
 
@@ -100,10 +101,21 @@ async function fetchCharacters() {
       const url = `https://dragonball-api.com/api/characters?page=${currentPage}`;
       const response = await fetch(url);
       const data = await response.json();
+      if (data.meta) {
+        totalPages = data.meta.totalPages;
+      }
 
       if (data.items && data.items.length > 0) {
         displayCharacters(data.items);
         currentPage++;
+      }
+
+      if (currentPage > totalPages) {
+        const msg = document.createElement("p");
+        msg.className = "text-center text-warning mt-4";
+        msg.textContent = "¡Has llegado al final!";
+        charactersContainer.appendChild(msg);
+        hasReachedEnd = true;
       }
     }
   } catch (error) {
@@ -113,6 +125,8 @@ async function fetchCharacters() {
     isLoading = false;
   }
 }
+
+  
 
 // funcion para buscar personajes
 function searchCharacters() {

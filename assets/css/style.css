@@ -1,0 +1,112 @@
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: -1;
+}
+
+#mainTitle {
+  max-width: 300px;  
+  height: auto;      
+  margin: 0 auto;    
+  display: block;    
+}
+
+/* iput y botones */
+.input-group input {
+  border: 2px solid #ff7b00;
+  background-color: #1e1e1e;
+  color: #fff;
+}
+
+.input-group input::placeholder {
+  color: #aaa;
+}
+
+.btn-primary {
+  background-color: #f57c00; 
+  border-color: #f57c00;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: #ff9800;
+  border-color: #ff9800;
+}
+
+.btn-outline-secondary {
+  color: #ccc;
+  border-color: #f4e1e1;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #555;
+  color: white;
+}
+
+/* tarjetas de personaje */
+.card {
+  
+  background-color: #212121;
+  color: white;
+  border: 2px solid #ff6600;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card-title {
+  color: #ff6200;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+/* bonton de detalles */
+.card .btn-secondary {
+  background-color: #ff6a00;
+  border: none;
+  color: #fff;
+}
+
+.card .btn-secondary:hover {
+  background-color: #ff0000;
+}
+#charactersContainer .card-img-top {
+  width: 100%;       
+  height: 300px;     
+  object-fit: contain; 
+}
+
+
+/* loader personalizado */
+.spinner-border.text-primary {
+  color: #ff4000;
+}
+
+/* modal personalizado */
+.modal-content {
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 2px solid #ff3c00;
+}
+
+.modal-title {
+  color: #ff6600;
+}
+
+/* imagen del modal */
+.modal-body img {
+  border: 2px solid #ff4400f8;
+  border-radius: 8px;
+}
